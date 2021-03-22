@@ -1,9 +1,14 @@
+import axios from 'axios'
 import React from 'react'
 import {useHistory} from 'react-router-dom'
 
-export default function deleteAccountModal() {
+export default function deleteAccountModal(props) {
+
     const history = useHistory()
-    const onDeleteAccount = () => {
+
+    const onDeleteAccount = async () => {
+        await axios.delete('/users/me', {headers: {"Authentication": `Bearer ${props.token}`}})
+        props.setToken(null)
         history.push('/')
     }
     return (

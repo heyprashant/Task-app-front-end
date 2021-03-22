@@ -1,12 +1,17 @@
 import React from 'react'
-import { Link,useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import axios from 'axios'
 
 export default function header(props) {
+    const history = useHistory()
     const onLogout = async () => {
         await axios.post('/users/logout', { headers: { authorization: `Bearer ${props.token}` }})
         props.setToken(null)
-        useHistory().push('/')
+        history.push('/')
+    }
+
+    const onTaskHandler = () => {
+        props.token ? history.push('/todo') : history.push('/')
     }
 
     const noAuth = (
@@ -35,7 +40,7 @@ export default function header(props) {
         <div>
             <nav className="navbar navbar-expand-lg navbar-light fixed-top">
                 <div className="container">
-                    <Link className="navbar-brand" to={"/sign-in"}>Task Manager</Link>
+                    <Link onClick={onTaskHandler} className="navbar-brand">Task Manager</Link>
                     <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
                         <ul className="navbar-nav  nav-bar">
                           {props.token? auth: noAuth}

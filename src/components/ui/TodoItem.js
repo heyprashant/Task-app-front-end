@@ -18,7 +18,7 @@ export default function TodoItem(props) {
                 </label>
                     <div style={{display: 'flex', justifyContent:'space-evenly'}}>
                         {/* <div style={{paddingRight:'20px'}}><FaPencilAlt  cursor="pointer" color='#A4A4A4' size='1.5rem' /></div> */}
-                        <div style={{paddingRight:'10px'}} onClick={() => {deleteItemById(data._id)}}><FaTrash cursor="pointer"  color='#A4A4A4' /></div>
+                        <div style={{paddingRight:'10px', }} onClick={() => {deleteItemById(data._id)}}><FaTrash cursor="pointer"  color='#9e9796' /></div>
                     </div>
             </div>
         </li>

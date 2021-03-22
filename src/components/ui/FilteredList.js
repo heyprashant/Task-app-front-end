@@ -12,7 +12,7 @@ export default function FilteredList(props) {
     }
 
     return (
-        <ul className="list-unstyled">
+        <ul className="list-unstyled scrollbar">
             {items.map(item => (
                 <TodoItem key={item._id} data={item} changeStatus={changeStatus} deleteItemById= {deleteItem}/>
             ))}

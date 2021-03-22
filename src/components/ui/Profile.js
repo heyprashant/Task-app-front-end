@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { FaPencilAlt, FaTrash, FaRegSave} from "react-icons/fa";
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
@@ -10,13 +10,17 @@ export default function Profile (props) {
     const AUTH_TOKEN = `Bearer ${props.token}`
     axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
+    const nameInput = useRef();
+    const ageInput = useRef();
+    const emailInput = useRef();
 
     const history = useHistory();
     const [edit, setEdit] = useState(false);
     const [name, setName] = useState("");
     const [age, setAge] = useState("");
-    const [email, setMail] = useState("");
+    const [email, setEmail] = useState("");
     const [imgData, setImg] = useState(null);
+    const [error, setError] = useState(null);
     // const [editImg, setEditImg] = useState(false)
 
     useEffect( async () => {
@@ -24,7 +28,7 @@ export default function Profile (props) {
         console.log(res.data)
         setName(res.data.name)
         setAge(res.data.age)
-        setMail(res.data.email)
+        setEmail(res.data.email)
         if(res.data.avatar) {
             setImg(`data:image/jpeg;base64,${res.data.avatar}`)
         }
@@ -35,15 +39,28 @@ export default function Profile (props) {
     const profile = <img src={imgData} alt="Profile pic" width="150" height="150" />
     const noProfile = <img src={url} alt="Profile pic" width="150" height="150"/>
 
-    const onSave = async () => {
+    const submitHandler = async (e) => {
+        e.preventDefault()
+        console.log('nameInput: ',nameInput)
         const data = {
-            name,
-            email,
-            age
+            name: nameInput.current.value,
+            email: emailInput.current.value,
+            age: ageInput.current.value
         }
-        await axios.patch('/users/me', data)
-        setEdit(false)
+        // try{
+        //     await axios.patch('/users/me', data)
+
+        //     setName(nameInput.current.value)
+        //     setAge(ageInput.current.value)
+        //     setEmail(emailInput.current.value)
+
+        //     setEdit(false)
+        // }
+        // catch(e) {
+        //     setError('This email already exists.')
+        // }
     }
+
     function getBase64(file) {
         return new Promise((resolve, reject) => {
           const reader = new FileReader();
@@ -69,22 +86,45 @@ export default function Profile (props) {
         setImg(dataUrl)
     }
 
+    const onEdit = () => {
+        setEdit(true)
+        console.log('onEdit',nameInput)
+        nameInput.current.value = name
+        ageInput.current.value = age
+        emailInput.current.value = email
+    }
+
     const disable = name.trim().length === 0 | email.trim().length === 0
 
     const update = (
         <p className="forgot-password text-right textClick">Update info <button onClick={() => setEdit(true)}><span style={{marginLeft:'10px'}}>
             <FaPencilAlt color="#333"  fontSize='1.5rem'/></span></button> </p>
     )
-    const save = (
-        <p className="forgot-password text-right textClick">Save info <button onClick={onSave} disabled={disable}><span style={{marginLeft:'10px'}}>
-            <FaRegSave color="#333" fontSize='1.5rem'/></span></button> </p>
-    )
+    // const save = (
+    //     <p className="forgot-password text-right textClick">Save info <button onClick={onSave} disabled={disable}><span style={{marginLeft:'10px'}}>
+    //         <FaRegSave color="#333" fontSize='1.5rem'/></span></button> </p>
+    // )
 
-    const nameInput = (<input value={name} onChange={(e)=>{setName(e.target.value)}} required></input>)
-    const ageInput = (<input value={age} onChange={(e)=>{setAge(e.target.value)}} required></input>)
-    const mailInput = (<input value={email} onChange={(e)=>{setMail(e.target.value)}} required></input>)
+    // const nameInput = (<input value={name} onChange={(e)=>{setName(e.target.value)}} required></input>)
+    // const ageInput = (<input type='number' value={age} onChange={(e)=>{setAge(e.target.value)}} required></input>)
+    // const mailInput = (<input type='email' value={email} onChange={(e)=>{setEmail(e.target.value)}} required></input>)
 
+        const inputForm = (
+            <form onSubmit={submitHandler} style={{marginLeft:'20px'}}>
+                <label>Name:</label>
+                <input  type="text" ref={nameInput} required></input>
+                <label>Age:</label>
+                <input type='number' min="0" value={age} onChange={(e)=>{setAge(e.target.current.value)}} ref={ageInput} required></input>
+                <label>Mail:</label>
+                <input type='email' value={email} onChange={(e)=>{setEmail(e.target.current.value)}} ref={emailInput} required></input>
+                <button type='submit'>Save info <FaRegSave color="#333"  fontSize='1.5rem'/></button>
+            </form>)
 
+        const details = (<div>
+            <div ><label>Name:</label>  {name}  </div>
+            <div><label>Age:</label>   {age}  </div>
+            <div><label>Mail:</label>   {email} </div>
+        </div>)
 
     const imageInput = (<div class="custom-file-upload"><label >
             <input type="file" onChange={onFileInput}/>
@@ -94,6 +134,12 @@ export default function Profile (props) {
         </div>
         )
 
+    const editAndDelte = (<div className='edit'>
+            <p className="forgot-password text-right textClick">Update info <button onClick={onEdit}><span style={{marginLeft:'10px'}}>
+            <FaPencilAlt color="#333"  fontSize='1.5rem'/></span></button> </p>
+            <p className="forgot-password text-right textClick">Delete Account <button disabled={edit}><span style={{marginLeft:'10px'}}>
+            <FaTrash onClick={() => history.push('/delete')} color="#333" fontSize='1.5rem'/> </span> </button></p>
+        </div>)
 
 
     return (
@@ -108,17 +154,11 @@ export default function Profile (props) {
                     </div>
                 </div>
                 <div style={{marginTop:'20px'}}>
-                    <div ><label>Name:</label>  {edit? nameInput: name}  </div>
-                    <div><label>Age:</label>   {edit? ageInput:age}  </div>
-                    <div><label>Mail:</label>   {edit? mailInput:email} </div>
+                    {edit ? inputForm: details}
                 </div>
             </div>
-            <div className='edit'>
-                {edit? save: update}
-                <p className="forgot-password text-right textClick">Delete Account <button disabled={edit}><span style={{marginLeft:'10px'}}>
-                    <FaTrash onClick={() => history.push('/delete')} color="#333" fontSize='1.5rem'/> </span> </button></p>
-            </div>
-
+            {edit & error ? <p>{error}</p>: null}
+            {edit? null: editAndDelte}
         </div>
     )
 }

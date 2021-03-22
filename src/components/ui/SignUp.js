@@ -11,6 +11,10 @@ class SignUp extends Component {
         this.ageInput = React.createRef();
         this.emailInput = React.createRef();
         this.passwordInput = React.createRef();
+
+        this.state = {
+            error : null
+        }
       }
 
     handleSubmit = async (e) => {
@@ -28,7 +32,10 @@ class SignUp extends Component {
         this.props.history.push('/todo')
        }
         catch(e){
-            console.log('exception:',e)
+            this.setState({
+                error: 'This email already exists.'
+            })
+            // console.log('exception:',e)
         }
 
     }
@@ -48,7 +55,7 @@ class SignUp extends Component {
 
                 <div className="form-group">
                     <label>Age</label>
-                    <input type="text" className="form-control" placeholder="Age" ref={this.ageInput} />
+                    <input type="number" min="0" className="form-control" placeholder="Age" ref={this.ageInput} />
                 </div>
 
                 <div className="form-group">
@@ -60,6 +67,8 @@ class SignUp extends Component {
                     <label>Password</label>
                     <input type="password" className="form-control" placeholder="Enter password" ref={this.passwordInput} required/>
                 </div>
+
+                <p style={{color:'#bf3636', textAlign:'center'}}>{this.state.error}</p>
 
                 <button type="submit" className="btn btn-dark btn-lg btn-block" >Register</button>
                 <p className="forgot-password text-right">

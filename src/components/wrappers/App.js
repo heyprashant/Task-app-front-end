@@ -26,7 +26,7 @@ function App() {
             <Route path="/sign-up" render={() => <SignUp setToken={setToken}/>} />
             <Route path="/todo" render={() => <Todo token={token}/>} />
             <Route path="/me" render={() => <Profile token={token}/>} />
-            <Route path="/delete" component={DeleteAccountModal} />
+            <Route path="/delete" render={() => <DeleteAccountModal token={token} setToken={setToken}/>} />
             <Redirect to = "/"/>
           </Switch>)
     }
