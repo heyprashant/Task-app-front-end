@@ -1,6 +1,6 @@
 import React from 'react';
 import CheckBox from './CheckBox';
-import { FaPencilAlt, FaTrash, FaRegSave} from "react-icons/fa";
+import { FaTrash} from "react-icons/fa";
 
 
 export default function TodoItem(props) {
@@ -17,8 +17,7 @@ export default function TodoItem(props) {
                     <CheckBox checked={data.completed} onChange={handleChange}/> {data.description}
                 </label>
                     <div style={{display: 'flex', justifyContent:'space-evenly'}}>
-                        {/* <div style={{paddingRight:'20px'}}><FaPencilAlt  cursor="pointer" color='#A4A4A4' size='1.5rem' /></div> */}
-                        <div style={{paddingRight:'10px', }} onClick={() => {deleteItemById(data._id)}}><FaTrash cursor="pointer"  color='#9e9796' /></div>
+                        <div style={{paddingRight:'10px'}} onClick={() => {deleteItemById(data._id)}}><FaTrash className='icon' cursor="pointer"  color='#9e9796' /></div>
                     </div>
             </div>
         </li>

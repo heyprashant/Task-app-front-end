@@ -1,37 +1,39 @@
-import React from 'react'
-import { Link, useHistory } from "react-router-dom";
+import React,{useState} from 'react'
+import {  NavLink, useHistory } from "react-router-dom";
 import axios from 'axios'
+import Loader from "react-loader-spinner";
+import logo from '../../assets/images/icon.png'
 
 export default function header(props) {
+
+    const [loader, setLoader] = useState(false)
     const history = useHistory()
+
+
     const onLogout = async () => {
-        await axios.post('/users/logout', { headers: { authorization: `Bearer ${props.token}` }})
+        setLoader(true)
+        try{
+            await axios.post('/users/logout', { headers: { authorization: `Bearer ${props.token}` }})
+        }
+        catch(e) {}
         props.setToken(null)
-        history.push('/')
+        localStorage.clear()
+        setLoader(false)
+        // history.push('/')
     }
 
-    const onTaskHandler = () => {
-        props.token ? history.push('/todo') : history.push('/')
-    }
+
 
     const noAuth = (
         <React.Fragment>
-            <li className="nav-item">
-                <Link className="nav-link" to={"/sign-in"}>Sign in</Link>
-            </li>
-            <li className="nav-item">
-                <Link className="nav-link" to={"/sign-up"}>Sign up</Link>
-            </li>
+                <NavLink  style={{textDecoration:'none'}} activeClassName="navbar__link--active" className="navbar__link" to={"/sign-in"}>Sign in</NavLink>
+                <NavLink style={{textDecoration:'none'}} activeClassName="navbar__link--active" className="navbar__link" to={"/sign-up"}>Sign up</NavLink>
         </ React.Fragment>)
 
     const auth = (
         <React.Fragment>
-            <li className="nav-item">
-                <Link className="nav-link" onClick={onLogout}>Log Out</Link>
-            </li>
-            <li className="nav-item">
-                <Link className="nav-link" to={"/me"}>Me</Link>
-            </li>
+                <NavLink to={'/'} style={{textDecoration:'none'}}  className="navbar__link" onClick={onLogout}>Log Out</NavLink>
+                <NavLink style={{textDecoration:'none'}} activeClassName="navbar__link--active" className="navbar__link" to={"/me"}>Me</NavLink>
         </React.Fragment>)
 
 
@@ -39,15 +41,16 @@ export default function header(props) {
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-light fixed-top">
-                <div className="container">
-                    <Link onClick={onTaskHandler} className="navbar-brand">Task Manager</Link>
-                    <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-                        <ul className="navbar-nav  nav-bar">
-                          {props.token? auth: noAuth}
-                        </ul>
+                   <div className='logo'>
+                    <img src={logo} width='40px'/>
+                    <NavLink to={props.token ? '/todo': '/'} style={{color: '#181818', textDecoration:'none'}}>Task Manager</NavLink>
+                   </div>
+                    <div className="collapse navbar-collapse" >
+                            <NavLink style={{textDecoration:'none'}} activeClassName="navbar__link--active" className="navbar__link" to="/about">About</NavLink>
+                        {props.token? auth: noAuth}
                     </div>
-                </div>
             </nav>
+            {loader ? <Loader className='loader' type="Grid" color="#808080" height={40} width={40} /> : null}
         </div>
     )
 }

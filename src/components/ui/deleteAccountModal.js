@@ -1,14 +1,22 @@
 import axios from 'axios'
-import React from 'react'
+import React, {useState} from 'react'
 import {useHistory} from 'react-router-dom'
+import Loader from "react-loader-spinner";
+
 
 export default function deleteAccountModal(props) {
+    const [loader, setLoader] = useState(false)
 
     const history = useHistory()
 
     const onDeleteAccount = async () => {
-        await axios.delete('/users/me', {headers: {"Authentication": `Bearer ${props.token}`}})
+        setLoader(true)
+        try {
+            await axios.delete('/users/me', {headers: {"Authentication": `Bearer ${props.token}`}})
+        } catch (error) { }
         props.setToken(null)
+        localStorage.clear()
+        setLoader(false)
         history.push('/')
     }
     return (
@@ -18,7 +26,7 @@ export default function deleteAccountModal(props) {
                 <button className="cancelBtn" onClick={() => history.push('/me')}>Cancel</button>
                 <button className="deleteBtn" onClick={onDeleteAccount}>Delete</button>
             </div>
-
+            {loader ? <Loader className='loader' type="Grid" color="#808080" height={40} width={40} /> : null}
         </div>
     )
 }

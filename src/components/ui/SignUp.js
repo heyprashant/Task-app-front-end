@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {Link, withRouter} from 'react-router-dom'
 import axios from 'axios'
+import Loader from "react-loader-spinner";
 
 
 class SignUp extends Component {
@@ -13,7 +14,8 @@ class SignUp extends Component {
         this.passwordInput = React.createRef();
 
         this.state = {
-            error : null
+            error : null,
+            loader: false
         }
       }
 
@@ -25,13 +27,16 @@ class SignUp extends Component {
             email: this.emailInput.current.value,
             password: this.passwordInput.current.value,
         }
-      try {
-        const res = await axios.post('/users', user)
-        this.props.setToken(res.data.token)
-        console.log(res)
-        this.props.history.push('/todo')
-       }
+        this.setState({loader: true})
+        try {
+            const res = await axios.post('/users', user)
+            localStorage.setItem('token', res.data.token)
+            this.props.setToken(res.data.token)
+            console.log(res)
+            this.props.history.push('/todo')
+        }
         catch(e){
+            this.setState({loader: false})
             this.setState({
                 error: 'This email already exists.'
             })
@@ -75,6 +80,8 @@ class SignUp extends Component {
                     Already registered <Link to={'/'}>log in?</Link>
                 </p>
             </form>
+            {this.state.loader ? <Loader className='loader' type="Grid" color="#808080" height={40} width={40} /> : null}
+
         </div>
         );
     }

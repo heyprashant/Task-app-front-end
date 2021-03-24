@@ -4,6 +4,7 @@ import {FILTER_ALL} from '../../services/filter';
 import {MODE_CREATE, MODE_NONE} from '../../services/mode';
 import {objectWithOnly, wrapChildrenWith} from '../../util/common';
 import {getAll, addToList, updateStatus, deleteItemById} from '../../services/todo';
+import Loader from "react-loader-spinner";
 
 
 
@@ -14,20 +15,23 @@ class StateProvider extends Component {
             query: '',
             mode: MODE_CREATE,
             filter: FILTER_ALL,
-            list: []
+            list: [],
+            loader: false
         }
     }
 
 
-    async componentWillMount() {
+    async componentDidMount() {
         const AUTH_TOKEN = `Bearer ${this.props.token}`
         axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
+        this.setState({loader: true})
         const res = await axios.get('/tasks?sortBy=createdAt:asc')
         this.setState({
             list: res.data
         })
-        console.log(res)
+        this.setState({loader: false})
+        // console.log(res)
     }
 
     render() {
@@ -38,12 +42,15 @@ class StateProvider extends Component {
 
         return (<div>
                     {children}
+                    {this.state.loader ? <Loader className='loader' type="Grid" color="#808080" height={40} width={40} /> : null}
                 </div>)
     }
 
     async addNew(text) {
         const data = {description: text}
+        this.setState({loader: true})
         const res = await axios.post('/tasks', data)
+        this.setState({loader: false})
         this.setState( prevState => ({list: prevState.list.concat([res.data])}))
         // let updatedList = addToList({description: text}, this.props.token, this.state.list);
         // this.setState({list: updatedList});
@@ -55,8 +62,10 @@ class StateProvider extends Component {
 
     async changeStatus(itemId, completed) {
         const data = {completed}
+        // this.setState({loader: true})
         const res = await axios.patch(`/tasks/${itemId}`,  data)
-        console.log(res.data)
+        // this.setState({loader: false})
+        // console.log(res.data)
         // const updatedList = updateStatus(this.state.list, itemId, completed);
         const updateState = (prevState) => {
             const updatedList = prevState.list.filter( item  => item._id !== itemId)
@@ -77,7 +86,9 @@ class StateProvider extends Component {
     }
 
     async deleteItem(id) {
+        this.setState({loader: true})
         const res = await axios.delete(`/tasks/${id}`)
+        this.setState({loader: false})
         this.setState( prevState => ({
             list: prevState.list.filter( item  => item._id !== id)
         }))

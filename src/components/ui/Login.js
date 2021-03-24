@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import {Link, withRouter} from 'react-router-dom'
 import axios from 'axios'
+import Loader from "react-loader-spinner";
 
 class Login extends Component {
     constructor(props) {
@@ -9,29 +10,33 @@ class Login extends Component {
         this.passwordInput = React.createRef();
 
         this.state = {
-            error : null
+            error : null,
+            loader: false
         }
       }
 
       handleSubmit = async (e) => {
         e.preventDefault()
+        this.setState({error: null})
         const user = {
             email: this.emailInput.current.value,
             password: this.passwordInput.current.value,
         }
+        this.setState({loader: true})
       try {
         const res = await axios.post('/users/login', user)
+        localStorage.setItem('token', res.data.token)
         this.props.setToken(res.data.token)
         this.props.history.push('/todo')
         console.log(res)
        }
         catch(e){
+            this.setState({loader: false})
             this.setState({
                 error: 'Your mail or password is invalid, please try again.'
             })
             // console.log('exception:',e)
         }
-
     }
 
 
@@ -54,9 +59,15 @@ class Login extends Component {
                 <p style={{color:'#bf3636', textAlign:'center'}}>{this.state.error}</p>
                 <button type="submit" className="btn btn-dark btn-lg btn-block" >Sign in</button>
                 <p className="forgot-password text-right">
+                    <Link to={'/password/reset'}>Forgot password?</Link>
+                </p>
+                <p className="forgot-password text-right">
                     Don't have an account? <Link to={'/sign-up'}>Sign Up</Link>
                 </p>
+
             </form>
+            {this.state.loader ? <Loader className='loader' type="Grid" color="#808080" height={40} width={40} /> : null}
+
         </div>
         );
     }
