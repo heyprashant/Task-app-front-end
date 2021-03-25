@@ -2,6 +2,8 @@ import React, { Component } from "react"
 import {Link, withRouter} from 'react-router-dom'
 import axios from 'axios'
 import Loader from "react-loader-spinner";
+import logo from '../../assets/images/checked.png'
+
 
 class Login extends Component {
     constructor(props) {
@@ -44,8 +46,7 @@ class Login extends Component {
         return (
           <div className="inner">
             <form onSubmit={this.handleSubmit}>
-
-                <h3>Log in</h3>
+            <img  src={logo} width='50px' style={{display:'block', marginRight:'auto', marginLeft:'auto', marginBottom: '25px', marginTop: '-10px'}}/>
 
                 <div className="form-group">
                     <label>Email</label>

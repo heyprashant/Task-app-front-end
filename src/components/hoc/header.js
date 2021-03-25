@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import {  NavLink, useHistory } from "react-router-dom";
 import axios from 'axios'
 import Loader from "react-loader-spinner";
-import logo from '../../assets/images/icon.png'
+import logo from '../../assets/images/checked.png'
 
 export default function header(props) {
 
@@ -41,8 +41,8 @@ export default function header(props) {
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-light fixed-top">
-                   <div className='logo'>
-                    <img src={logo} width='40px'/>
+                   <div onClick={() => {history.push('/')}} className='logo'>
+                    <img  src={logo} width='25px' style={{marginRight:'4px'}}/>
                     <NavLink to={props.token ? '/todo': '/'} style={{color: '#181818', textDecoration:'none'}}>Task Manager</NavLink>
                    </div>
                     <div className="collapse navbar-collapse" >

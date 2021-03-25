@@ -53,6 +53,7 @@ function App() {
             <Header token={token} setToken={setToken}/>
             <div className="outer">
                 {routes}
+                <div style={{position:'fixed', bottom:'0', right:'0', margin:'0px 40px 30px', fontFamily:'monospace'}}>Made with ❤️ by Prashant</div>
             </div>
       </div></Router>
     );

@@ -70,12 +70,12 @@ class SignUp extends Component {
 
                 <div className="form-group">
                     <label>Password</label>
-                    <input type="password" className="form-control" placeholder="Enter password" ref={this.passwordInput} required/>
+                    <input type="password" minLength='7' className="form-control" placeholder="Enter password" ref={this.passwordInput}  required/>
                 </div>
 
                 <p style={{color:'#bf3636', textAlign:'center'}}>{this.state.error}</p>
 
-                <button type="submit" className="btn btn-dark btn-lg btn-block" >Register</button>
+                <button type="submit" className="btn btn-dark btn-lg btn-block" >Sign up</button>
                 <p className="forgot-password text-right">
                     Already registered <Link to={'/'}>log in?</Link>
                 </p>

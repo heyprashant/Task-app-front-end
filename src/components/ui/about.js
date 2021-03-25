@@ -13,7 +13,7 @@ export default function about() {
                 <br/>
                 Prashant is a passion driven and ambitious software developer with strong problem solving & analytical skills, having experience in JavaScript-based technologies and always eager to learn something new.
                 </p>
-                <p style={{fontWeight:'500', fontSize:'2rem', color:'#222', textAlign: 'center', marginTop:'20px'}}>Get in touch</p>
+                <p style={{fontWeight:'500', fontSize:'2rem', color:'#222', textAlign: 'center', marginTop:'20px', fontFamily:'monospace' }}>Get in touch</p>
             </div>
             <div className="about-section">
                 <div>
