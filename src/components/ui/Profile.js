@@ -51,7 +51,7 @@ export default function Profile (props) {
 
     const submitHandler = async (e) => {
         e.preventDefault()
-        console.log('nameInput: ',nameInput)
+        // console.log('nameInput: ',nameInput)
         const data = {
             name,
             email,

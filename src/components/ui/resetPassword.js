@@ -8,18 +8,18 @@ class ResetPassword extends React.Component {
     async componentDidMount() {
             const token = this.props.match.params.token
             const history = this.props.history
-            console.log('reset password')
+            // console.log('reset password')
             if(!token) {
                 history.push('/')
             }
             try {
                 const res = await axios.get('/users/me',{ headers: {'Authorization': `Bearer ${token}` }})
-                console.log(res)
+                // console.log(res)
                 this.props.setToken(token)
                 history.push('/update-password')
-                console.log('historyPush')
+                // console.log('historyPush')
             } catch (error) {
-                console.log(error,'no token')
+                // console.log(error,'no token')
                 history.push('/')
             }
     }

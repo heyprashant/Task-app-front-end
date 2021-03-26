@@ -13,7 +13,7 @@ export default function TodoItem(props) {
     return (
         <li className={className}>
             <div className="checkbox" style={{display:'flex', justifyContent: 'space-between'}}>
-                <label onClick={() => console.log('click')}>
+                <label >
                     <CheckBox checked={data.completed} onChange={handleChange}/> {data.description}
                 </label>
                     <div style={{display: 'flex', justifyContent:'space-evenly'}}>

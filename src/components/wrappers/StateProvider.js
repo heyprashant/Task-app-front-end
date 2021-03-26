@@ -62,9 +62,9 @@ class StateProvider extends Component {
 
     async changeStatus(itemId, completed) {
         const data = {completed}
-        // this.setState({loader: true})
+        this.setState({loader: true})
         const res = await axios.patch(`/tasks/${itemId}`,  data)
-        // this.setState({loader: false})
+        this.setState({loader: false})
         // console.log(res.data)
         // const updatedList = updateStatus(this.state.list, itemId, completed);
         const updateState = (prevState) => {

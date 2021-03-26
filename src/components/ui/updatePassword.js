@@ -46,11 +46,11 @@ export default function updatePassword(props) {
         try {
             const pwd = e.target[0].value
             const res = await axios.patch('/users/me', {password: pwd })
-            console.log(res)
+            // console.log(res)
             history.push('/todo')
         } catch (e) {
             setLoader(false)
-            console.log('exception',e)
+            // console.log('exception',e)
         }
     }
 

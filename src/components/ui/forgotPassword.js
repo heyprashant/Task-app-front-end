@@ -14,7 +14,7 @@ export default function forgotPassword() {
         const data = e.target[0].value
         try{
             const res = await axios.post('/users/passwordReset', {email: data})
-            console.log(res.data.user.name)
+            // console.log(res.data.user.name)
             setUser(res.data.user.name)
         }
         catch(e) {

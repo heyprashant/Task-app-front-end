@@ -32,7 +32,7 @@ class SignUp extends Component {
             const res = await axios.post('/users', user)
             localStorage.setItem('token', res.data.token)
             this.props.setToken(res.data.token)
-            console.log(res)
+            // console.log(res)
             this.props.history.push('/todo')
         }
         catch(e){

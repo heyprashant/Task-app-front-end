@@ -69,7 +69,7 @@ export const addToList = async (data, token, list) => {
     // }, data);
 
     const res = await axios.post('/tasks', data, { headers: {"Authorization" : `Bearer ${token}`} })
-    console.log('add', res)
+    // console.log('add', res)
     return list.concat([res.data])
     // return list
 }

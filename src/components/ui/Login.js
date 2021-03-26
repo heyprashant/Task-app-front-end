@@ -30,7 +30,7 @@ class Login extends Component {
         localStorage.setItem('token', res.data.token)
         this.props.setToken(res.data.token)
         this.props.history.push('/todo')
-        console.log(res)
+        // console.log(res)
        }
         catch(e){
             this.setState({loader: false})
